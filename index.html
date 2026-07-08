@@ -1,0 +1,2376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP Computer Science A - Exam Practice Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fontsource-roboto@4.0.0/index.min.css">
+<style>
+:root {
+  --primary: #00356B;
+  --primary-light: #0055A4;
+  --accent: #FFD100;
+  --accent2: #00A3E0;
+  --success: #2ECC71;
+  --warning: #F39C12;
+  --danger: #E74C3C;
+  --bg: #F0F4F8;
+  --card: #FFFFFF;
+  --text: #1A202C;
+  --text-secondary: #4A5568;
+  --border: #E2E8F0;
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --radius: 12px;
+  --code-bg: #1E293B;
+  --code-text: #E2E8F0;
+}
+[data-theme="dark"] {
+  --bg: #0F172A;
+  --card: #1E293B;
+  --text: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --border: #334155;
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4);
+  --code-bg: #0F172A;
+  --code-text: #E2E8F0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: all 0.3s ease;
+  min-height: 100vh;
+}
+.hidden { display: none !important; }
+
+/* Login Screen */
+#loginView {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #00356B 0%, #0055A4 50%, #00A3E0 100%);
+  padding: 20px;
+}
+.login-container {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+.login-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.login-logo h1 {
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.login-logo p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+.login-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+.login-tab {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.login-tab.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  width: 100%;
+  justify-content: center;
+  padding: 14px;
+}
+.btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--accent2);
+  color: white;
+}
+.btn-secondary:hover { opacity: 0.9; }
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+.btn-outline:hover { background: var(--primary); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+.login-error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin-top: 10px;
+  text-align: center;
+}
+.student-list-hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 15px;
+  text-align: center;
+  padding: 10px;
+  background: var(--bg);
+  border-radius: 8px;
+}
+
+/* Main App Layout */
+#mainApp { display: none; min-height: 100vh; }
+.app-header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-logo {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+.header-nav {
+  display: flex;
+  gap: 4px;
+}
+.nav-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+.nav-btn:hover, .nav-btn.active {
+  background: var(--primary);
+  color: white;
+}
+.header-right { display: flex; align-items: center; gap: 12px; }
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+.theme-toggle:hover { border-color: var(--primary); }
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--bg);
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.logout-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--danger);
+  background: transparent;
+  color: var(--danger);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.logout-btn:hover { background: var(--danger); color: white; }
+
+/* Main Content */
+.main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Dashboard */
+.dashboard-hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 20px;
+  padding: 40px;
+  color: white;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.dashboard-hero::after {
+  content: '';
+  position: absolute;
+  right: -50px;
+  top: -50px;
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+.dashboard-hero h2 { font-size: 1.8rem; margin-bottom: 8px; }
+.dashboard-hero p { opacity: 0.9; font-size: 1rem; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+.stat-card .stat-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+.stat-card .stat-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+.stat-card .stat-change {
+  font-size: 0.8rem;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.stat-change.up { background: rgba(46,204,113,0.1); color: var(--success); }
+.stat-change.down { background: rgba(231,76,60,0.1); color: var(--danger); }
+
+/* Units Grid */
+.units-section { margin-bottom: 24px; }
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.unit-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.unit-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.unit-card .unit-number {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--primary);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.unit-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.unit-card p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; }
+.unit-card .unit-progress {
+  margin-top: 16px;
+  height: 6px;
+  background: var(--bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.unit-card .unit-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent2));
+  border-radius: 3px;
+  transition: width 0.5s;
+}
+.unit-card .unit-weight {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Exam Setup */
+.exam-setup {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.exam-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.exam-option {
+  padding: 20px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.exam-option:hover { border-color: var(--primary); }
+.exam-option.selected { border-color: var(--primary); background: rgba(0,53,107,0.05); }
+.exam-option .option-icon { font-size: 2rem; margin-bottom: 8px; }
+.exam-option h4 { margin-bottom: 4px; }
+.exam-option p { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* Exam View */
+.exam-header {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  position: sticky;
+  top: 70px;
+  z-index: 50;
+}
+.exam-timer {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+.exam-timer.warning { color: var(--warning); }
+.exam-timer.danger { color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+.exam-progress-bar {
+  flex: 1;
+  margin: 0 24px;
+  height: 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.exam-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent2));
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+.question-nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.q-nav-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.q-nav-btn.answered { background: var(--success); color: white; border-color: var(--success); }
+.q-nav-btn.current { border-color: var(--primary); background: var(--primary); color: white; }
+.q-nav-btn.flagged { border-color: var(--warning); }
+
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.question-number {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--primary);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.question-topic {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--accent2);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 8px;
+}
+.question-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+.question-code {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  white-space: pre;
+}
+.answer-options { display: flex; flex-direction: column; gap: 10px; }
+.answer-option {
+  padding: 14px 20px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.answer-option:hover { border-color: var(--primary); background: rgba(0,53,107,0.03); }
+.answer-option.selected { border-color: var(--primary); background: rgba(0,53,107,0.08); }
+.answer-option .option-letter {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.answer-option.selected .option-letter {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.answer-option .option-text { font-size: 0.95rem; line-height: 1.5; }
+
+/* FRQ Editor */
+.frq-editor {
+  background: var(--code-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 16px;
+}
+.frq-editor-header {
+  background: rgba(0,0,0,0.3);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--code-text);
+  font-size: 0.85rem;
+}
+.frq-editor textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 16px;
+  background: transparent;
+  color: var(--code-text);
+  border: none;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+}
+.frq-prompt {
+  background: var(--bg);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-left: 4px solid var(--primary);
+}
+.frq-prompt h4 { margin-bottom: 8px; color: var(--primary); }
+.frq-prompt p { font-size: 0.9rem; line-height: 1.6; }
+
+/* Results */
+.results-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border-radius: 20px;
+  padding: 40px;
+  color: white;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.results-score {
+  font-size: 4rem;
+  font-weight: 700;
+  margin: 16px 0;
+}
+.ap-score-badge {
+  display: inline-block;
+  padding: 8px 24px;
+  background: var(--accent);
+  color: var(--primary);
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.result-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+.result-card h3 {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* Circular Chart */
+.circular-chart {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 16px;
+  position: relative;
+}
+.circular-chart svg { transform: rotate(-90deg); }
+.circular-chart .chart-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Topic Bars */
+.topic-bar {
+  margin-bottom: 12px;
+}
+.topic-bar-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+.topic-bar-track {
+  height: 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.topic-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s;
+}
+
+/* Feedback */
+.feedback-item {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--success);
+}
+.feedback-item.incorrect { border-left-color: var(--danger); }
+.feedback-item.partial { border-left-color: var(--warning); }
+.feedback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.feedback-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.feedback-status.correct { background: rgba(46,204,113,0.1); color: var(--success); }
+.feedback-status.incorrect { background: rgba(231,76,60,0.1); color: var(--danger); }
+.feedback-explanation {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+/* Analytics */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 16px;
+}
+.analytics-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+.analytics-card h3 { margin-bottom: 16px; font-size: 1rem; }
+.chart-container { position: relative; }
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 200px;
+  padding: 10px 0;
+}
+.bar-chart .bar {
+  flex: 1;
+  background: linear-gradient(180deg, var(--primary), var(--accent2));
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  min-width: 30px;
+  transition: height 0.5s;
+}
+.bar-chart .bar-label {
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.bar-chart .bar-value {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Exam History Table */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.history-table th, .history-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.history-table th {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+/* Admin Panel */
+.admin-panel {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.admin-panel h3 { margin-bottom: 16px; }
+.student-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.student-row:last-child { border-bottom: none; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-header { flex-wrap: wrap; gap: 8px; padding: 10px 16px; }
+  .header-nav { order: 3; width: 100%; overflow-x: auto; }
+  .main-content { padding: 16px; }
+  .dashboard-hero { padding: 24px; }
+  .dashboard-hero h2 { font-size: 1.3rem; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .units-grid { grid-template-columns: 1fr; }
+  .exam-header { flex-wrap: wrap; gap: 8px; }
+  .question-card { padding: 20px; }
+  .results-score { font-size: 3rem; }
+  .analytics-grid { grid-template-columns: 1fr; }
+  .nav-btn { padding: 6px 10px; font-size: 0.8rem; }
+}
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .login-container { padding: 24px; }
+  .exam-options { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.modal {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+.modal h3 { margin-bottom: 16px; }
+.modal-actions { display: flex; gap: 12px; margin-top: 20px; justify-content: flex-end; }
+
+/* Rubric Score */
+.rubric-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+.rubric-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+}
+.rubric-dot.earned { background: var(--success); }
+.rubric-dot.not-earned { background: var(--border); color: var(--text-secondary); }
+
+/* Recommendation */
+.recommendation {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+.recommendation .rec-icon { font-size: 1.2rem; }
+
+/* Tab content */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Debug Panel */
+.debug-panel {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.75rem;
+  max-width: 300px;
+  z-index: 1000;
+  box-shadow: var(--shadow-lg);
+}
+.debug-panel h4 {
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+.debug-panel pre {
+  background: var(--bg);
+  padding: 8px;
+  border-radius: 4px;
+  overflow-x: auto;
+  max-height: 200px;
+  overflow-y: auto;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN VIEW -->
+<div id="loginView">
+  <div class="login-container fade-in">
+    <div class="login-logo">
+      <h1> AP Computer Science A</h1>
+      <p>Exam Practice Dashboard</p>
+    </div>
+    <div class="login-tabs">
+      <div class="login-tab active" onclick="switchLoginTab('student')">👨‍ Student</div>
+      <div class="login-tab" onclick="switchLoginTab('admin')">💼 Admin</div>
+    </div>
+    <div id="studentLoginForm">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="studentUsername" placeholder="Enter your first name" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="studentPassword" placeholder="Enter password">
+      </div>
+      <button class="btn btn-primary" onclick="loginStudent()">Sign In →</button>
+      <div class="login-error" id="loginError"></div>
+      <div class="student-list-hint">
+        💡 Students: alice, bob, charlie, diana, ethan, fiona, george, hannah, ivan, julia, kevin, laura, michael, nina, oscar<br>
+        Password: firstname_2027 (e.g., alice_2027)
+      </div>
+    </div>
+    <div id="adminLoginForm" class="hidden">
+      <div class="form-group">
+        <label>Admin Username</label>
+        <input type="text" id="adminUsername" placeholder="admin">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="adminPassword" placeholder="Enter admin password">
+      </div>
+      <button class="btn btn-primary" onclick="loginAdmin()">Admin Sign In →</button>
+      <div class="login-error" id="adminLoginError"></div>
+      <div class="student-list-hint">
+        💡 Admin: admin / admin2027
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp">
+  <header class="app-header">
+    <div class="header-left">
+      <div class="header-logo"> AP CSA Practice</div>
+      <nav class="header-nav" id="mainNav">
+        <button class="nav-btn active" onclick="showView('dashboard')">Dashboard</button>
+        <button class="nav-btn" onclick="showView('examSetup')">Practice Exam</button>
+        <button class="nav-btn" onclick="showView('analytics')">Analytics</button>
+        <button class="nav-btn" id="adminNavBtn" onclick="showView('admin')" style="display:none">Admin</button>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn"></button>
+      <div class="user-badge">
+        <div class="user-avatar" id="userAvatar">A</div>
+        <span id="userName">Alice</span>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboardView" class="tab-content active">
+      <div class="dashboard-hero fade-in">
+        <h2>Welcome back, <span id="dashUserName">Alice</span>! 👋</h2>
+        <p>Continue your AP Computer Science A exam preparation. You're making great progress!</p>
+      </div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="stat-icon"></div>
+          <div class="stat-value" id="statExams">0</div>
+          <div class="stat-label">Exams Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"></div>
+          <div class="stat-value" id="statBest">--</div>
+          <div class="stat-label">Highest Score</div>
+          <div class="stat-change up" id="statBestChange">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-value" id="statAvg">--</div>
+          <div class="stat-label">Average Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-value" id="statAP">--</div>
+          <div class="stat-label">AP Score Prediction</div>
+        </div>
+      </div>
+      <div class="units-section">
+        <h2 class="section-title">📚 AP CSA Units (Current Curriculum)</h2>
+        <div class="units-grid">
+          <div class="unit-card" onclick="showView('examSetup')">
+            <span class="unit-number">UNIT 1</span>
+            <span class="unit-weight">2.5-5%</span>
+            <h3>Primitive Types</h3>
+            <p>int, double, boolean, arithmetic operators, Math class, String basics</p>
+            <div class="unit-progress"><div class="unit-progress-fill" id="u1progress" style="width:0%"></div></div>
+          </div>
+          <div class="unit-card" onclick="showView('examSetup')">
+            <span class="unit-number">UNIT 2</span>
+            <span class="unit-weight">5-7.5%</span>
+            <h3>Using Objects</h3>
+            <p>Object creation, methods, parameters, return values, String & Math APIs</p>
+            <div class="unit-progress"><div class="unit-progress-fill" id="u2progress" style="width:0%"></div></div>
+          </div>
+          <div class="unit-card" onclick="showView('examSetup')">
+            <span class="unit-number">UNIT 3</span>
+            <span class="unit-weight">15-17.5%</span>
+            <h3>Boolean Expressions & if Statements</h3>
+            <p>Boolean logic, comparison operators, if/else, nested conditionals</p>
+            <div class="unit-progress"><div class="unit-progress-fill" id="u3progress" style="width:0%"></div></div>
+          </div>
+          <div class="unit-card" onclick="showView('examSetup')">
+            <span class="unit-number">UNIT 4</span>
+            <span class="unit-weight">50-52%</span>
+            <h3>Iteration & Data Collections</h3>
+            <p>for/while loops, Arrays, ArrayLists, 2D Arrays, Recursion, Searching & Sorting Algorithms</p>
+            <div class="unit-progress"><div class="unit-progress-fill" id="u4progress" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:24px">
+        <h2 class="section-title"> Quick Actions</h2>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="startQuickExam('timed')" style="width:auto">️ Timed Practice (90 min)</button>
+          <button class="btn btn-secondary" onclick="startQuickExam('untimed')" style="width:auto">📖 Untimed Practice</button>
+          <button class="btn btn-outline" onclick="showView('analytics')" style="width:auto">📊 View Analytics</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAM SETUP VIEW -->
+    <div id="examSetupView" class="tab-content">
+      <div class="exam-setup fade-in">
+        <h2 class="section-title">📝 Practice Exam Setup</h2>
+        <p style="color:var(--text-secondary);margin-bottom:20px">Configure your practice exam settings</p>
+        <div class="form-group">
+          <label>Exam Mode</label>
+          <div class="exam-options">
+            <div class="exam-option selected" onclick="selectExamMode('timed',this)">
+              <div class="option-icon">⏱️</div>
+              <h4>Timed Exam</h4>
+              <p>90 minutes - Simulates real AP exam conditions</p>
+            </div>
+            <div class="exam-option" onclick="selectExamMode('untimed',this)">
+              <div class="option-icon">📖</div>
+              <h4>Untimed Exam</h4>
+              <p>No time limit - Learn at your own pace</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Question Focus</label>
+          <div class="exam-options">
+            <div class="exam-option selected" onclick="selectExamFocus('all',this)">
+              <div class="option-icon">📚</div>
+              <h4>All Topics</h4>
+              <p>50 MCQs + 5 FRQs covering all units</p>
+            </div>
+            <div class="exam-option" onclick="selectExamFocus('unit4',this)">
+              <div class="option-icon">🔢</div>
+              <h4>Unit 4 Focus</h4>
+              <p>Heavy emphasis on Data Collections (Arrays, ArrayLists, Recursion)</p>
+            </div>
+            <div class="exam-option" onclick="selectExamFocus('mcq',this)">
+              <div class="option-icon">✅</div>
+              <h4>MCQ Only</h4>
+              <p>50 Multiple Choice Questions</p>
+            </div>
+            <div class="exam-option" onclick="selectExamFocus('frq',this)">
+              <div class="option-icon"></div>
+              <h4>FRQ Only</h4>
+              <p>5 Free Response Questions with code editor</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
+          <button class="btn btn-primary" onclick="startExam()" style="width:auto;padding:14px 32px">🚀 Start Exam</button>
+          <button class="btn btn-outline" onclick="showView('dashboard')" style="width:auto">← Back to Dashboard</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAM VIEW -->
+    <div id="examView" class="tab-content">
+      <div class="exam-header">
+        <div>
+          <div style="font-weight:700;font-size:0.9rem">AP CSA Practice Exam</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary)" id="examModeLabel">Timed • 90 min</div>
+        </div>
+        <div class="exam-timer" id="examTimer">90:00</div>
+        <div class="exam-progress-bar">
+          <div class="exam-progress-fill" id="examProgressFill" style="width:0%"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-sm btn-outline" onclick="flagQuestion()">🚩 Flag</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmSubmit()">Submit Exam</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 200px;gap:16px" id="examLayout">
+        <div id="questionContainer"></div>
+        <div>
+          <div class="question-card" style="padding:16px">
+            <h4 style="font-size:0.85rem;margin-bottom:12px">Question Navigator</h4>
+            <div class="question-nav" id="questionNav"></div>
+            <div style="margin-top:16px;font-size:0.75rem;color:var(--text-secondary)">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:12px;height:12px;background:var(--success);border-radius:3px"></div> Answered</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:12px;height:12px;background:var(--primary);border-radius:3px"></div> Current</div>
+              <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;background:var(--warning);border-radius:3px"></div> Flagged</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS VIEW -->
+    <div id="resultsView" class="tab-content">
+      <div id="resultsContent"></div>
+    </div>
+
+    <!-- ANALYTICS VIEW -->
+    <div id="analyticsView" class="tab-content">
+      <h2 class="section-title">📊 Progress Analytics</h2>
+      <div class="stats-grid" style="margin-bottom:24px">
+        <div class="stat-card">
+          <div class="stat-icon"></div>
+          <div class="stat-value" id="anExams">0</div>
+          <div class="stat-label">Total Exams</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-value" id="anBest">--</div>
+          <div class="stat-label">Best Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-value" id="anAvg">--</div>
+          <div class="stat-label">Average</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏱️</div>
+          <div class="stat-value" id="anTime">0h</div>
+          <div class="stat-label">Total Study Time</div>
+        </div>
+      </div>
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h3> Score Trend</h3>
+          <div class="chart-container">
+            <div class="bar-chart" id="scoreTrendChart"></div>
+          </div>
+        </div>
+        <div class="analytics-card">
+          <h3> Topic Mastery</h3>
+          <div id="topicMasteryChart"></div>
+        </div>
+        <div class="analytics-card">
+          <h3> Exam History</h3>
+          <div style="overflow-x:auto">
+            <table class="history-table" id="historyTable">
+              <thead><tr><th>Date</th><th>Mode</th><th>MCQ</th><th>AP Score</th><th>Status</th></tr></thead>
+              <tbody id="historyBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="analytics-card">
+          <h3>💪 Strengths & Weaknesses</h3>
+          <div id="strengthsWeaknesses"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN VIEW -->
+    <div id="adminView" class="tab-content">
+      <h2 class="section-title">‍💼 Admin Panel</h2>
+      <div class="admin-panel">
+        <h3>📊 Student Overview</h3>
+        <div id="adminStudentList"></div>
+      </div>
+      <div class="admin-panel">
+        <h3>📈 Class Analytics</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value">15</div>
+            <div class="stat-label">Total Students</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-value" id="adminTotalExams">0</div>
+            <div class="stat-label">Total Exams Taken</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"></div>
+            <div class="stat-value" id="adminClassAvg">--</div>
+            <div class="stat-label">Class Average</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay hidden" id="confirmModal">
+  <div class="modal">
+    <h3 id="modalTitle">Confirm Submission</h3>
+    <p id="modalMessage">Are you sure you want to submit your exam?</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="modalConfirmBtn" onclick="submitExam()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const STUDENTS = ['alice','bob','charlie','diana','ethan','fiona','george','hannah','ivan','julia','kevin','laura','michael','nina','oscar'];
+const ADMIN_CREDENTIALS = { username: 'admin', password: 'admin2027' };
+
+let currentUser = null;
+let currentRole = 'student';
+let examMode = 'timed';
+let examFocus = 'all';
+let currentQuestion = 0;
+let examQuestions = [];
+let examAnswers = {};
+let examFlags = {};
+let examStartTime = null;
+let examTimerInterval = null;
+let timeRemaining = 90 * 60;
+let examHasFRQs = false;
+let examHasMCQs = false;
+
+// ==================== QUESTIONS DATA ====================
+const MCQ_QUESTIONS = [
+  // Unit 1 - Primitive Types (5)
+  {id:1,unit:1,topic:"Primitive Types",question:"What is the result of the following expression?\nint x = 7 / 2;",code:"int x = 7 / 2;\nSystem.out.println(x);",options:["3","3.5","4","7","2"],correct:0,explanation:"Integer division in Java truncates the decimal. 7/2 = 3 (not 3.5)."},
+  {id:2,unit:1,topic:"Primitive Types",question:"Which of the following correctly declares and initializes a double variable?",code:null,options:["int d = 3.14;","double d = 3.14;","double d = '3.14';","Double d = 3.14;","double d = \"3.14\";"],correct:1,explanation:"double d = 3.14; correctly declares a double primitive with a decimal literal."},
+  {id:3,unit:1,topic:"Primitive Types",question:"What does Math.pow(2, 3) return?",code:"double result = Math.pow(2, 3);",options:["6","8","8.0","9","23"],correct:2,explanation:"Math.pow returns a double. 2³ = 8, so it returns 8.0."},
+  {id:4,unit:1,topic:"Primitive Types",question:"What is the value of result after execution?",code:"int a = 10;\nint b = 3;\nint result = a % b;",options:["3","1","0","10","3.33"],correct:1,explanation:"The % operator returns the remainder. 10 % 3 = 1 (since 10 = 3×3 + 1)."},
+  {id:5,unit:1,topic:"Primitive Types",question:"Which data type should be used to store true/false values?",code:null,options:["int","String","boolean","char","double"],correct:2,explanation:"The boolean data type stores true or false values in Java."},
+
+  // Unit 2 - Using Objects (5)
+  {id:6,unit:2,topic:"Using Objects",question:"How do you create a new String object?",code:null,options:["String s = new String(\"hello\");","String s = \"hello\";","Both A and B are valid","String s = String(\"hello\");","new String s = \"hello\";"],correct:2,explanation:"Both String s = new String(\"hello\") and String s = \"hello\" are valid ways to create a String."},
+  {id:7,unit:2,topic:"Using Objects",question:"What does s.length() return for the following?",code:"String s = \"AP CSA\";",options:["5","6","7","AP CSA","6.0"],correct:1,explanation:"\"AP CSA\" has 6 characters: A, P, (space), C, S, A."},
+  {id:8,unit:2,topic:"Using Objects",question:"What is the output?",code:"String s = \"Hello\";\nSystem.out.println(s.substring(1, 3));",options:["Hel","el","ell","He","llo"],correct:1,explanation:"substring(1,3) returns characters at index 1 and 2 (exclusive end), which is \"el\"."},
+  {id:9,unit:2,topic:"Using Objects",question:"Which method compares two Strings for equality?",code:null,options:["== operator",".equals()",".compareTo()","Both B and C",".same()"],correct:3,explanation:"Both .equals() and .compareTo() can compare Strings. == compares references, not content."},
+  {id:10,unit:2,topic:"Using Objects",question:"What does Math.abs(-5) return?",code:"int x = Math.abs(-5);",options:["-5","5","0","5.0","Error"],correct:1,explanation:"Math.abs returns the absolute value. abs(-5) = 5."},
+
+  // Unit 3 - Boolean/If/Loop (5)
+  {id:11,unit:3,topic:"Boolean Expressions",question:"What is the result of: (5 > 3) && (2 < 1)?",code:"boolean result = (5 > 3) && (2 < 1);",options:["true","false","5","1","Error"],correct:1,explanation:"(5>3) is true, (2<1) is false. true && false = false."},
+  {id:12,unit:3,topic:"If Statements",question:"What is printed?",code:"int x = 10;\nif (x > 5) {\n  System.out.println(\"A\");\n} else if (x > 8) {\n  System.out.println(\"B\");\n} else {\n  System.out.println(\"C\");\n}",options:["A","B","C","AB","AC"],correct:0,explanation:"x=10, x>5 is true, so \"A\" is printed. The else-if is skipped."},
+  {id:13,unit:3,topic:"Loops",question:"How many times does the loop execute?",code:"for (int i = 0; i < 5; i++) {\n  System.out.println(i);\n}",options:["4","5","6","Infinite","0"],correct:1,explanation:"i goes from 0 to 4 (i<5), so the loop executes 5 times."},
+  {id:14,unit:3,topic:"Loops",question:"What is the output?",code:"int i = 0;\nwhile (i < 3) {\n  System.out.print(i + \" \");\n  i++;\n}",options:["0 1 2","1 2 3","0 1 2 3","0 1","1 2"],correct:0,explanation:"The while loop prints i then increments. Output: 0 1 2."},
+  {id:15,unit:3,topic:"Boolean Expressions",question:"Which expression is equivalent to !(a && b)?",code:null,options:["!a && !b","!a || !b","a || b","!(a || b)","!a && b"],correct:1,explanation:"By De Morgan's Law: !(a && b) = !a || !b."},
+
+  // Unit 4 - Arrays (10)
+  {id:16,unit:4,topic:"Array Creation",question:"Which correctly creates an array of 5 integers?",code:null,options:["int[] arr = new int[5];","int arr[] = new int(5);","int arr = new int[5];","Array arr = new int[5];","int[5] arr = new int[];"],correct:0,explanation:"int[] arr = new int[5]; is the correct syntax for array declaration and creation."},
+  {id:17,unit:4,topic:"Array Access",question:"What is arr[2]?",code:"int[] arr = {10, 20, 30, 40, 50};",options:["10","20","30","40","50"],correct:2,explanation:"Arrays are 0-indexed. arr[0]=10, arr[1]=20, arr[2]=30."},
+  {id:18,unit:4,topic:"Array Traversal",question:"What does this code print?",code:"int[] arr = {3, 7, 1, 9, 4};\nint sum = 0;\nfor (int i = 0; i < arr.length; i++) {\n  sum += arr[i];\n}\nSystem.out.println(sum);",options:["24","20","15","9","7"],correct:0,explanation:"3+7+1+9+4 = 24."},
+  {id:19,unit:4,topic:"Array Algorithms",question:"What does this method find?",code:"public static int mystery(int[] arr) {\n  int max = arr[0];\n  for (int i = 1; i < arr.length; i++) {\n    if (arr[i] > max) {\n      max = arr[i];\n    }\n  }\n  return max;\n}",options:["Minimum value","Maximum value","Average value","Sum of all values","First element"],correct:1,explanation:"The method iterates through the array and keeps track of the largest value found, returning the maximum."},
+  {id:20,unit:4,topic:"Array Traversal",question:"What is the output?",code:"int[] arr = {5, 3, 8, 1, 9};\nfor (int i = arr.length - 1; i >= 0; i--) {\n  System.out.print(arr[i] + \" \");\n}",options:["5 3 8 1 9","9 1 8 3 5","1 3 5 8 9","9 8 5 3 1","5 9 1 8 3"],correct:1,explanation:"The loop traverses the array in reverse order: 9 1 8 3 5."},
+  {id:21,unit:4,topic:"Array Algorithms",question:"What does this code do?",code:"for (int i = 0; i < arr.length - 1; i++) {\n  for (int j = 0; j < arr.length - 1 - i; j++) {\n    if (arr[j] > arr[j+1]) {\n      int temp = arr[j];\n      arr[j] = arr[j+1];\n      arr[j+1] = temp;\n    }\n  }\n}",options:["Finds maximum","Sorts in ascending order","Sorts in descending order","Reverses the array","Searches for a value"],correct:1,explanation:"This is the Bubble Sort algorithm, which sorts the array in ascending order."},
+  {id:22,unit:4,topic:"Array Creation",question:"What is the default value of elements in a new int array?",code:"int[] arr = new int[10];",options:["null","0","1","-1","undefined"],correct:1,explanation:"In Java, int array elements are initialized to 0 by default."},
+  {id:23,unit:4,topic:"Array Algorithms",question:"What is the result of linear search for value 7?",code:"int[] arr = {3, 7, 1, 9, 4};\n// Linear search for 7",options:["Index 0","Index 1","Index 2","Not found","Index 7"],correct:1,explanation:"Linear search checks each element. arr[1] = 7, so it returns index 1."},
+  {id:24,unit:4,topic:"Array Traversal",question:"What is printed?",code:"int[] arr = {2, 4, 6, 8};\nfor (int val : arr) {\n  if (val % 2 == 0) {\n    System.out.print(val + \" \");\n  }\n}",options:["2 4 6 8","4 8","2 6","Nothing","Error"],correct:0,explanation:"All values (2,4,6,8) are even, so all are printed."},
+  {id:25,unit:4,topic:"Array Algorithms",question:"Which algorithm has O(n log n) time complexity?",code:null,options:["Linear Search","Bubble Sort","Selection Sort","Merge Sort","Sequential Search"],correct:3,explanation:"Merge Sort has O(n log n) time complexity. Linear search is O(n), bubble/selection sort are O(n²)."},
+
+  // Unit 4 - ArrayList (8)
+  {id:26,unit:4,topic:"ArrayList Methods",question:"Which method adds an element to an ArrayList?",code:null,options:[".add()",".append()",".push()",".insert()",".put()"],correct:0,explanation:"ArrayList uses .add() to add elements."},
+  {id:27,unit:4,topic:"ArrayList Methods",question:"What does list.remove(2) do?",code:"ArrayList<Integer> list = new ArrayList<>();\nlist.add(10); list.add(20); list.add(30); list.add(40);\nlist.remove(2);",options:["Removes value 2","Removes element at index 2 (value 30)","Removes the last element","Removes all elements","Error"],correct:1,explanation:"remove(2) removes the element at index 2, which is 30."},
+  {id:28,unit:4,topic:"ArrayList Traversals",question:"What is the size after these operations?",code:"ArrayList<String> list = new ArrayList<>();\nlist.add(\"A\");\nlist.add(\"B\");\nlist.add(1, \"C\");\nlist.remove(0);",options:["1","2","3","4","0"],correct:1,explanation:"After add A,B: [A,B]. After add(1,C): [A,C,B]. After remove(0): [C,B]. Size = 2."},
+  {id:29,unit:4,topic:"ArrayList Algorithms",question:"What does this method return?",code:"public static int countEvens(ArrayList<Integer> list) {\n  int count = 0;\n  for (int val : list) {\n    if (val % 2 == 0) count++;\n  }\n  return count;\n}",options:["Sum of even numbers","Count of even numbers","Largest even number","Index of first even","All even numbers"],correct:1,explanation:"The method counts how many even numbers are in the list."},
+  {id:30,unit:4,topic:"ArrayList Methods",question:"Which is true about ArrayList vs Array?",code:null,options:["ArrayList has fixed size","Array can grow dynamically","ArrayList can store primitives directly","ArrayList size can change dynamically","Array uses .add() method"],correct:3,explanation:"ArrayList can grow and shrink dynamically, while arrays have fixed size."},
+  {id:31,unit:4,topic:"ArrayList Traversals",question:"What is printed?",code:"ArrayList<Integer> nums = new ArrayList<>();\nnums.add(5); nums.add(3); nums.add(8);\nfor (int i = 0; i < nums.size(); i++) {\n  System.out.print(nums.get(i) + \" \");\n}",options:["5 3 8","3 5 8","8 3 5","5 8 3","Error"],correct:0,explanation:"Elements are retrieved in order: 5, 3, 8."},
+  {id:32,unit:4,topic:"ArrayList Methods",question:"What does list.set(1, 99) do?",code:"ArrayList<Integer> list = new ArrayList<>();\nlist.add(10); list.add(20); list.add(30);\nlist.set(1, 99);",options:["Adds 99 at index 1","Replaces element at index 1 with 99","Sets size to 99","Removes element at index 1","Error"],correct:1,explanation:".set(index, value) replaces the element at the specified index."},
+  {id:33,unit:4,topic:"ArrayList Algorithms",question:"Best practice when removing elements during traversal?",code:null,options:["Use regular for loop forward","Use enhanced for loop","Traverse backward or use iterator","Use while loop","Any method works"],correct:2,explanation:"When removing during traversal, traverse backward or use an iterator to avoid skipping elements."},
+
+  // Unit 4 - 2D Arrays (5)
+  {id:34,unit:4,topic:"2D Array Creation",question:"How many elements in this 2D array?",code:"int[][] grid = new int[3][4];",options:["7","12","3","4","Error"],correct:1,explanation:"3 rows × 4 columns = 12 elements."},
+  {id:35,unit:4,topic:"2D Array Traversals",question:"What does grid[1][2] access?",code:"int[][] grid = {{1,2,3},{4,5,6},{7,8,9}};",options:["1","2","5","6","3"],correct:2,explanation:"grid[1][2] = row 1, column 2 = 5 (0-indexed)."},
+  {id:36,unit:4,topic:"2D Array Algorithms",question:"This code calculates:",code:"int sum = 0;\nfor (int r = 0; r < grid.length; r++) {\n  for (int c = 0; c < grid[0].length; c++) {\n    sum += grid[r][c];\n  }\n}",options:["Row sum","Column sum","Total sum of all elements","Diagonal sum","Maximum value"],correct:2,explanation:"Nested loops iterate through all rows and columns, summing all elements."},
+  {id:37,unit:4,topic:"2D Array Traversals",question:"How to traverse column by column?",code:null,options:["Outer loop: rows, Inner loop: columns","Outer loop: columns, Inner loop: rows","Single loop","Enhanced for loop only","Cannot traverse column by column"],correct:1,explanation:"To traverse column by column, the outer loop iterates columns and inner loop iterates rows."},
+  {id:38,unit:4,topic:"2D Array Algorithms",question:"What does this find?",code:"int max = grid[0][0];\nfor (int[] row : grid) {\n  for (int val : row) {\n    if (val > max) max = val;\n  }\n}",options:["Row maximum","Column maximum","Overall maximum","Minimum value","Average"],correct:2,explanation:"Iterates through all elements finding the overall maximum value."},
+
+  // Unit 4 - Recursion (5)
+  {id:39,unit:4,topic:"Recursion",question:"What is the base case in this method?",code:"public static int factorial(int n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}",options:["n <= 1","n * factorial(n-1)","return 1","factorial(n-1)","n"],correct:0,explanation:"The base case is n <= 1, which stops the recursion."},
+  {id:40,unit:4,topic:"Recursion",question:"What does factorial(4) return?",code:"public static int factorial(int n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}",options:["4","8","12","24","120"],correct:3,explanation:"4! = 4×3×2×1 = 24."},
+  {id:41,unit:4,topic:"Recursion",question:"What happens without a base case?",code:null,options:["Returns 0","Returns null","Infinite recursion / StackOverflow","Compilation error","Returns -1"],correct:2,explanation:"Without a base case, recursion continues infinitely causing StackOverflowError."},
+  {id:42,unit:4,topic:"Recursion",question:"What is the output?",code:"public static void mystery(int n) {\n  if (n > 0) {\n    System.out.print(n + \" \");\n    mystery(n - 1);\n  }\n}\nmystery(3);",options:["3 2 1","1 2 3","3 2 1 0","0 1 2 3","3"],correct:0,explanation:"Prints n before recursive call: 3, then 2, then 1."},
+  {id:43,unit:4,topic:"Recursion",question:"Which problem is best solved with recursion?",code:null,options:["Simple addition","Finding array length","Tree traversal","Variable assignment","Printing a string"],correct:2,explanation:"Tree traversal is naturally recursive due to the hierarchical structure."},
+
+  // Unit 4 - Searching & Sorting (7)
+  {id:44,unit:4,topic:"Searching Algorithms",question:"Binary search requires:",code:null,options:["Unsorted array","Sorted array","ArrayList only","2D array","Linked list"],correct:1,explanation:"Binary search requires the array to be sorted to work correctly."},
+  {id:45,unit:4,topic:"Searching Algorithms",question:"Binary search time complexity:",code:null,options:["O(n)","O(n²)","O(log n)","O(n log n)","O(1)"],correct:2,explanation:"Binary search halves the search space each step, giving O(log n) complexity."},
+  {id:46,unit:4,topic:"Sorting Algorithms",question:"Selection sort finds what in each pass?",code:null,options:["The smallest unsorted element","The largest element","The middle element","A random element","The first element"],correct:0,explanation:"Selection sort finds the minimum element in the unsorted portion and swaps it into place."},
+  {id:47,unit:4,topic:"Sorting Algorithms",question:"Insertion sort is most efficient when:",code:null,options:["Array is reverse sorted","Array is already sorted","Array is random","Array is large","Array has duplicates"],correct:1,explanation:"Insertion sort is O(n) when the array is already sorted (best case)."},
+  {id:48,unit:4,topic:"Searching Algorithms",question:"How many comparisons max for binary search on 16 elements?",code:null,options:["16","8","4","5","3"],correct:2,explanation:"log₂(16) = 4 comparisons maximum."},
+  {id:49,unit:4,topic:"Sorting Algorithms",question:"Which sort is stable?",code:null,options:["Selection Sort","Bubble Sort","Quick Sort","Heap Sort","None"],correct:1,explanation:"Bubble Sort is stable - equal elements maintain their relative order."},
+  {id:50,unit:4,topic:"Algorithms",question:"What is the worst case for linear search?",code:null,options:["O(1)","O(log n)","O(n)","O(n²)","O(n log n)"],correct:2,explanation:"Linear search worst case is O(n) when the element is at the end or not present."}
+];
+
+const FRQ_QUESTIONS = [
+  {
+    id: 1,
+    unit: 2,
+    topic: "Classes and Objects",
+    title: "FRQ 1: StudentGrade Class",
+    prompt: "Write a class StudentGrade that stores a student's name and test scores. The class should have:\n• A constructor that takes a String name and an int[] of scores\n• A method getAverage() that returns the average score as a double\n• A method getLetterGrade() that returns \"A\" if avg >= 90, \"B\" if >= 80, \"C\" if >= 70, \"D\" if >= 60, \"F\" otherwise\n• A method toString() that returns \"Name: [name], Average: [avg], Grade: [letter]\"",
+    rubric: [
+      {point:1,description:"Constructor properly stores name and scores array"},
+      {point:1,description:"getAverage() correctly calculates average of all scores"},
+      {point:1,description:"getLetterGrade() uses correct threshold comparisons"},
+      {point:1,description:"toString() returns properly formatted string"}
+    ],
+    sampleSolution: "public class StudentGrade {\n  private String name;\n  private int[] scores;\n\n  public StudentGrade(String name, int[] scores) {\n    this.name = name;\n    this.scores = scores;\n  }\n\n  public double getAverage() {\n    int sum = 0;\n    for (int s : scores) sum += s;\n    return (double) sum / scores.length;\n  }\n\n  public String getLetterGrade() {\n    double avg = getAverage();\n    if (avg >= 90) return \"A\";\n    if (avg >= 80) return \"B\";\n    if (avg >= 70) return \"C\";\n    if (avg >= 60) return \"D\";\n    return \"F\";\n  }\n\n  public String toString() {\n    return \"Name: \" + name + \", Average: \" + getAverage() + \", Grade: \" + getLetterGrade();\n  }\n}"
+  },
+  {
+    id: 2,
+    unit: 4,
+    topic: "Array Algorithms",
+    title: "FRQ 2: Array Processor",
+    prompt: "Write a method processArray(int[] arr) that:\n• Creates and returns a new array containing only the positive values from arr\n• The new array should be exactly the right size (no extra zeros)\n• Maintains the original order of positive values\n\nExample: processArray({-3, 5, -1, 8, 2, -4}) should return {5, 8, 2}",
+    rubric: [
+      {point:1,description:"First pass counts positive elements"},
+      {point:1,description:"Creates new array of correct size"},
+      {point:1,description:"Second pass copies positive values"},
+      {point:1,description:"Maintains original order"}
+    ],
+    sampleSolution: "public static int[] processArray(int[] arr) {\n  int count = 0;\n  for (int val : arr) {\n    if (val > 0) count++;\n  }\n  int[] result = new int[count];\n  int index = 0;\n  for (int val : arr) {\n    if (val > 0) {\n      result[index] = val;\n      index++;\n    }\n  }\n  return result;\n}"
+  },
+  {
+    id: 3,
+    unit: 4,
+    topic: "2D Array",
+    title: "FRQ 3: Grid Operations",
+    prompt: "Write a method findRowMax(int[][] grid) that returns an array containing the maximum value from each row of the 2D array.\n\nExample: For grid = {{3,7,1},{9,2,5},{4,8,6}}, return {7, 9, 8}",
+    rubric: [
+      {point:1,description:"Creates result array of size grid.length"},
+      {point:1,description:"Outer loop iterates through rows"},
+      {point:1,description:"Inner loop finds max in each row"},
+      {point:1,description:"Returns correct array of row maximums"}
+    ],
+    sampleSolution: "public static int[] findRowMax(int[][] grid) {\n  int[] maxes = new int[grid.length];\n  for (int r = 0; r < grid.length; r++) {\n    int max = grid[r][0];\n    for (int c = 1; c < grid[r].length; c++) {\n      if (grid[r][c] > max) {\n        max = grid[r][c];\n      }\n    }\n    maxes[r] = max;\n  }\n  return maxes;\n}"
+  },
+  {
+    id: 4,
+    unit: 4,
+    topic: "ArrayList",
+    title: "FRQ 4: List Filter",
+    prompt: "Write a method filterList(ArrayList<Integer> list, int threshold) that:\n• Removes all elements from the list that are less than the threshold\n• Modifies the original list (does not create a new one)\n• Works correctly without skipping elements\n\nExample: filterList([3, 7, 1, 9, 4, 8], 5) should leave list as [7, 9, 8]",
+    rubric: [
+      {point:1,description:"Traverses list (backward or with proper index management)"},
+      {point:1,description:"Correctly compares each element to threshold"},
+      {point:1,description:"Removes elements less than threshold"},
+      {point:1,description:"Does not skip elements during removal"}
+    ],
+    sampleSolution: "public static void filterList(ArrayList<Integer> list, int threshold) {\n  for (int i = list.size() - 1; i >= 0; i--) {\n    if (list.get(i) < threshold) {\n      list.remove(i);\n    }\n  }\n}"
+  },
+  {
+    id: 5,
+    unit: 4,
+    topic: "Recursion",
+    title: "FRQ 5: Recursive Sum",
+    prompt: "Write a recursive method recursiveSum(int[] arr, int index) that returns the sum of all elements from index to the end of the array.\n\n• Base case: when index >= arr.length, return 0\n• Recursive case: return arr[index] + recursiveSum(arr, index + 1)\n\nExample: recursiveSum({2, 4, 6, 8}, 0) returns 20",
+    rubric: [
+      {point:1,description:"Has correct base case (index >= arr.length returns 0)"},
+      {point:1,description:"Recursive call uses index + 1"},
+      {point:1,description:"Adds arr[index] to recursive result"},
+      {point:1,description:"Method signature is correct"}
+    ],
+    sampleSolution: "public static int recursiveSum(int[] arr, int index) {\n  if (index >= arr.length) {\n    return 0;\n  }\n  return arr[index] + recursiveSum(arr, index + 1);\n}"
+  }
+];
+
+// ==================== AUTH ====================
+function switchLoginTab(role) {
+  document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  if (role === 'student') {
+    document.getElementById('studentLoginForm').classList.remove('hidden');
+    document.getElementById('adminLoginForm').classList.add('hidden');
+  } else {
+    document.getElementById('studentLoginForm').classList.add('hidden');
+    document.getElementById('adminLoginForm').classList.remove('hidden');
+  }
+}
+
+function loginStudent() {
+  const username = document.getElementById('studentUsername').value.trim().toLowerCase();
+  const password = document.getElementById('studentPassword').value.trim();
+  const errorEl = document.getElementById('loginError');
+  
+  if (!username || !password) {
+    errorEl.textContent = 'Please enter username and password';
+    return;
+  }
+  if (!STUDENTS.includes(username)) {
+    errorEl.textContent = 'Student not found. Check the list below.';
+    return;
+  }
+  if (password !== username + '_2027') {
+    errorEl.textContent = 'Incorrect password. Format: firstname_2027';
+    return;
+  }
+  
+  currentUser = username;
+  currentRole = 'student';
+  console.log('✅ Student logged in:', currentUser);
+  enterApp();
+}
+
+function loginAdmin() {
+  const username = document.getElementById('adminUsername').value.trim().toLowerCase();
+  const password = document.getElementById('adminPassword').value.trim();
+  const errorEl = document.getElementById('adminLoginError');
+  
+  if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+    currentUser = 'admin';
+    currentRole = 'admin';
+    console.log('✅ Admin logged in');
+    enterApp();
+  } else {
+    errorEl.textContent = 'Invalid admin credentials';
+  }
+}
+
+function enterApp() {
+  document.getElementById('loginView').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('userName').textContent = currentUser.charAt(0).toUpperCase() + currentUser.slice(1);
+  document.getElementById('userAvatar').textContent = currentUser.charAt(0).toUpperCase();
+  document.getElementById('dashUserName').textContent = currentUser.charAt(0).toUpperCase() + currentUser.slice(1);
+  
+  if (currentRole === 'admin') {
+    document.getElementById('adminNavBtn').style.display = 'block';
+  }
+  
+  loadTheme();
+  updateDashboard();
+  showView('dashboard');
+}
+
+function logout() {
+  currentUser = null;
+  currentRole = 'student';
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('loginView').style.display = 'flex';
+  document.getElementById('studentUsername').value = '';
+  document.getElementById('studentPassword').value = '';
+  document.getElementById('adminUsername').value = '';
+  document.getElementById('adminPassword').value = '';
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('adminLoginError').textContent = '';
+  document.getElementById('adminNavBtn').style.display = 'none';
+  if (examTimerInterval) clearInterval(examTimerInterval);
+  console.log('👋 User logged out');
+}
+
+// ==================== THEME ====================
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  document.getElementById('themeBtn').textContent = next === 'dark' ? '️' : '🌙';
+  localStorage.setItem('apcsa-theme', next);
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('apcsa-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('themeBtn').textContent = saved === 'dark' ? '☀️' : '🌙';
+}
+
+// ==================== NAVIGATION ====================
+function showView(viewName) {
+  console.log('🔄 Navigating to:', viewName);
+  document.querySelectorAll('.tab-content').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  
+  const viewMap = {
+    'dashboard': 'dashboardView',
+    'examSetup': 'examSetupView',
+    'exam': 'examView',
+    'results': 'resultsView',
+    'analytics': 'analyticsView',
+    'admin': 'adminView'
+  };
+  
+  const el = document.getElementById(viewMap[viewName]);
+  if (el) el.classList.add('active');
+  
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const navMap = {'dashboard':0,'examSetup':1,'analytics':2,'admin':3};
+  if (navMap[viewName] !== undefined && navBtns[navMap[viewName]]) {
+    navBtns[navMap[viewName]].classList.add('active');
+  }
+  
+  if (viewName === 'dashboard') updateDashboard();
+  if (viewName === 'analytics') updateAnalytics();
+  if (viewName === 'admin') updateAdmin();
+}
+
+// ==================== EXAM SETUP ====================
+function selectExamMode(mode, el) {
+  examMode = mode;
+  el.parentElement.querySelectorAll('.exam-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectExamFocus(focus, el) {
+  examFocus = focus;
+  el.parentElement.querySelectorAll('.exam-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function startQuickExam(mode) {
+  examMode = mode;
+  examFocus = 'all';
+  startExam();
+}
+
+function startExam() {
+  console.log(' Starting exam - Mode:', examMode, 'Focus:', examFocus);
+  
+  // Build question set
+  let mcqs = [...MCQ_QUESTIONS];
+  let frqs = [...FRQ_QUESTIONS];
+  
+  if (examFocus === 'unit4') {
+    mcqs = mcqs.filter(q => q.unit === 4);
+  } else if (examFocus === 'mcq') {
+    frqs = [];
+  } else if (examFocus === 'frq') {
+    mcqs = [];
+  }
+  
+  // Shuffle MCQs
+  mcqs = shuffleArray(mcqs);
+  
+  examQuestions = [];
+  examHasMCQs = mcqs.length > 0;
+  examHasFRQs = frqs.length > 0;
+  
+  mcqs.forEach(q => examQuestions.push({...q, type: 'mcq'}));
+  frqs.forEach(q => examQuestions.push({...q, type: 'frq'}));
+  
+  console.log('📝 Exam questions:', examQuestions.length, 'MCQs:', mcqs.length, 'FRQs:', frqs.length);
+  
+  examAnswers = {};
+  examFlags = {};
+  currentQuestion = 0;
+  
+  document.getElementById('examModeLabel').textContent = 
+    examMode === 'timed' ? 'Timed • 90 min' : 'Untimed • No limit';
+  
+  showView('exam');
+  renderQuestion();
+  renderQuestionNav();
+  
+  if (examMode === 'timed') {
+    timeRemaining = 90 * 60;
+    startTimer();
+  } else {
+    document.getElementById('examTimer').textContent = '∞';
+  }
+  
+  examStartTime = Date.now();
+}
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startTimer() {
+  if (examTimerInterval) clearInterval(examTimerInterval);
+  examTimerInterval = setInterval(() => {
+    timeRemaining--;
+    if (timeRemaining <= 0) {
+      clearInterval(examTimerInterval);
+      submitExam();
+      return;
+    }
+    const mins = Math.floor(timeRemaining / 60);
+    const secs = timeRemaining % 60;
+    const timerEl = document.getElementById('examTimer');
+    timerEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+    timerEl.className = 'exam-timer';
+    if (timeRemaining < 300) timerEl.classList.add('danger');
+    else if (timeRemaining < 600) timerEl.classList.add('warning');
+  }, 1000);
+}
+
+// ==================== EXAM RENDERING ====================
+function renderQuestion() {
+  const q = examQuestions[currentQuestion];
+  const container = document.getElementById('questionContainer');
+  
+  let html = `<div class="question-card fade-in">`;
+  html += `<span class="question-number">Question ${currentQuestion + 1} of ${examQuestions.length}</span>`;
+  html += `<span class="question-topic">${q.topic}</span>`;
+  html += `<div class="question-text" style="white-space:pre-wrap">${q.type === 'frq' ? q.title + '\n\n' + q.prompt : q.question}</div>`;
+  
+  if (q.code) {
+    html += `<div class="question-code">${escapeHtml(q.code)}</div>`;
+  }
+  
+  if (q.type === 'mcq') {
+    html += `<div class="answer-options">`;
+    const letters = ['A','B','C','D','E'];
+    q.options.forEach((opt, i) => {
+      const selected = examAnswers[q.id] === i ? 'selected' : '';
+      html += `<div class="answer-option ${selected}" onclick="selectAnswer(${q.id},${i})">
+        <div class="option-letter">${letters[i]}</div>
+        <div class="option-text">${escapeHtml(opt)}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div class="frq-prompt"><h4> Your Response</h4><p>Write your Java code below. Include proper syntax, variable names, and logic.</p></div>`;
+    html += `<div class="frq-editor">
+      <div class="frq-editor-header">
+        <span>Java Code Editor</span>
+        <span>${(examAnswers[q.id]||'').split('\n').length} lines</span>
+      </div>
+      <textarea id="frqEditor" placeholder="// Write your solution here...&#10;public class Solution {&#10;  // Your code...&#10;}" oninput="saveFrqAnswer(${q.id})">${examAnswers[q.id] || ''}</textarea>
+    </div>`;
+  }
+  
+  html += `<div style="display:flex;justify-content:space-between;margin-top:20px;gap:12px">`;
+  html += `<button class="btn btn-outline btn-sm" onclick="prevQuestion()" ${currentQuestion===0?'disabled':''}>← Previous</button>`;
+  html += `<button class="btn btn-primary btn-sm" onclick="nextQuestion()" ${currentQuestion===examQuestions.length-1?'disabled':''}>Next →</button>`;
+  html += `</div></div>`;
+  
+  container.innerHTML = html;
+  updateProgress();
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function selectAnswer(qid, idx) {
+  examAnswers[qid] = idx;
+  console.log('✅ Answer saved - Q' + qid + ':', idx);
+  renderQuestion();
+  renderQuestionNav();
+}
+
+function saveFrqAnswer(qid) {
+  const editor = document.getElementById('frqEditor');
+  if (editor) {
+    examAnswers[qid] = editor.value;
+    renderQuestionNav();
+  }
+}
+
+function nextQuestion() {
+  if (currentQuestion < examQuestions.length - 1) {
+    currentQuestion++;
+    renderQuestion();
+    renderQuestionNav();
+  }
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestion();
+    renderQuestionNav();
+  }
+}
+
+function goToQuestion(idx) {
+  currentQuestion = idx;
+  renderQuestion();
+  renderQuestionNav();
+}
+
+function flagQuestion() {
+  const q = examQuestions[currentQuestion];
+  examFlags[q.id] = !examFlags[q.id];
+  renderQuestionNav();
+}
+
+function renderQuestionNav() {
+  const nav = document.getElementById('questionNav');
+  let html = '';
+  examQuestions.forEach((q, i) => {
+    let cls = 'q-nav-btn';
+    if (examAnswers[q.id] !== undefined && examAnswers[q.id] !== '') cls += ' answered';
+    if (i === currentQuestion) cls += ' current';
+    if (examFlags[q.id]) cls += ' flagged';
+    html += `<button class="${cls}" onclick="goToQuestion(${i})">${i+1}</button>`;
+  });
+  nav.innerHTML = html;
+}
+
+function updateProgress() {
+  const answered = Object.keys(examAnswers).filter(k => examAnswers[k] !== undefined && examAnswers[k] !== '').length;
+  const pct = (answered / examQuestions.length) * 100;
+  document.getElementById('examProgressFill').style.width = pct + '%';
+}
+
+function confirmSubmit() {
+  const answered = Object.keys(examAnswers).filter(k => examAnswers[k] !== undefined && examAnswers[k] !== '').length;
+  const unanswered = examQuestions.length - answered;
+  document.getElementById('modalTitle').textContent = 'Submit Exam?';
+  document.getElementById('modalMessage').textContent = `You have answered ${answered} of ${examQuestions.length} questions. ${unanswered > 0 ? unanswered + ' questions are unanswered.' : 'All questions answered!'} Submit now?`;
+  document.getElementById('confirmModal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('confirmModal').classList.add('hidden');
+}
+
+// ==================== SCORING ====================
+function submitExam() {
+  console.log('📤 Submitting exam...');
+  closeModal();
+  if (examTimerInterval) clearInterval(examTimerInterval);
+  
+  const timeTaken = Math.floor((Date.now() - examStartTime) / 1000);
+  
+  // Score MCQs
+  let mcqCorrect = 0;
+  let mcqTotal = 0;
+  const mcqResults = [];
+  const topicStats = {};
+  
+  examQuestions.forEach(q => {
+    if (!topicStats[q.topic]) topicStats[q.topic] = {correct:0,total:0};
+    
+    if (q.type === 'mcq') {
+      mcqTotal++;
+      topicStats[q.topic].total++;
+      const isCorrect = examAnswers[q.id] === q.correct;
+      if (isCorrect) {
+        mcqCorrect++;
+        topicStats[q.topic].correct++;
+      }
+      mcqResults.push({
+        questionId: q.id,
+        topic: q.topic,
+        question: q.question,
+        code: q.code,
+        options: q.options,
+        correct: q.correct,
+        userAnswer: examAnswers[q.id],
+        isCorrect: isCorrect,
+        explanation: q.explanation
+      });
+    }
+  });
+  
+  console.log('📊 MCQ Results:', mcqCorrect, '/', mcqTotal);
+  
+  // Score FRQs (only if exam has FRQs)
+  const frqResults = [];
+  let frqTotalPoints = 0;
+  let frqEarnedPoints = 0;
+  
+  if (examHasFRQs) {
+    // Only score FRQs that were in the exam
+    const examFrqIds = examQuestions.filter(q => q.type === 'frq').map(q => q.id);
+    
+    FRQ_QUESTIONS.forEach(frq => {
+      if (!examFrqIds.includes(frq.id)) return; // Skip FRQs not in this exam
+      
+      const answer = examAnswers[frq.id] || '';
+      let earned = 0;
+      const rubricResults = [];
+      
+      frq.rubric.forEach((r, i) => {
+        const keywords = getRubricKeywords(frq, i);
+        const hasKeyword = keywords.some(kw => answer.toLowerCase().includes(kw.toLowerCase()));
+        if (hasKeyword) earned++;
+        rubricResults.push({...r, earned: hasKeyword});
+      });
+      
+      frqTotalPoints += frq.rubric.length;
+      frqEarnedPoints += earned;
+      frqResults.push({question: frq, answer, earned, total: frq.rubric.length, rubric: rubricResults});
+    });
+  }
+  
+  console.log('📊 FRQ Results:', frqEarnedPoints, '/', frqTotalPoints);
+  
+  // Calculate scores based on what was actually in the exam
+  let overallPct = 0;
+  
+  if (examHasMCQs && examHasFRQs) {
+    // Both MCQ and FRQ: 60% MCQ, 40% FRQ
+    const mcqPct = mcqTotal > 0 ? (mcqCorrect / mcqTotal * 100) : 0;
+    const frqPct = frqTotalPoints > 0 ? (frqEarnedPoints / frqTotalPoints * 100) : 0;
+    overallPct = (mcqPct * 0.6 + frqPct * 0.4);
+  } else if (examHasMCQs) {
+    // MCQ only: 100% MCQ
+    overallPct = mcqTotal > 0 ? (mcqCorrect / mcqTotal * 100) : 0;
+  } else if (examHasFRQs) {
+    // FRQ only: 100% FRQ
+    overallPct = frqTotalPoints > 0 ? (frqEarnedPoints / frqTotalPoints * 100) : 0;
+  }
+  
+  const apScore = calculateAPScore(overallPct);
+  
+  console.log('📊 Overall:', Math.round(overallPct) + '%', 'AP Score:', apScore);
+  
+  // Save to history
+  const result = {
+    date: new Date().toISOString(),
+    mode: examMode,
+    focus: examFocus,
+    mcqCorrect, mcqTotal,
+    frqEarned: frqEarnedPoints, frqTotal: frqTotalPoints,
+    overallPct: Math.round(overallPct),
+    apScore,
+    timeTaken,
+    topicStats,
+    mcqResults,
+    frqResults,
+    hasMCQs: examHasMCQs,
+    hasFRQs: examHasFRQs
+  };
+  
+  saveResult(result);
+  showResults(result);
+}
+
+function getRubricKeywords(frq, rubricIndex) {
+  const keywordSets = [
+    // FRQ 1: StudentGrade
+    [
+      ['constructor','this.name','this.scores','private String name','private int[] scores'],
+      ['getAverage','sum','scores.length','(double)','for','return'],
+      ['getLetterGrade','>= 90','>= 80','>= 70','>= 60','return'],
+      ['toString','Name:','Average:','Grade:','return']
+    ],
+    // FRQ 2: Array Processor
+    [
+      ['count','for','val > 0','positive','count++'],
+      ['new int','result','count','new array'],
+      ['for','index','result[index]','val','positive'],
+      ['return result','order','maintain']
+    ],
+    // FRQ 3: Grid Operations
+    [
+      ['new int','grid.length','maxes','result array'],
+      ['for','r < grid.length','row','outer loop'],
+      ['grid[r][c]','max','inner loop','compare'],
+      ['return maxes','maxes[r]']
+    ],
+    // FRQ 4: List Filter
+    [
+      ['for','i = list.size','i >= 0','i--','backward','traverse'],
+      ['list.get(i)','< threshold','compare'],
+      ['list.remove','remove(i)'],
+      ['skip','correct removal','backward']
+    ],
+    // FRQ 5: Recursive Sum
+    [
+      ['index >= arr.length','return 0','base case'],
+      ['index + 1','recursiveSum','recursive call'],
+      ['arr[index]','+','add'],
+      ['int[]','int index','return int','method signature']
+    ]
+  ];
+  return keywordSets[frq.id - 1]?.[rubricIndex] || [];
+}
+
+function calculateAPScore(pct) {
+  if (pct >= 75) return 5;
+  if (pct >= 62) return 4;
+  if (pct >= 50) return 3;
+  if (pct >= 38) return 2;
+  return 1;
+}
+
+function saveResult(result) {
+  const key = `apcsa-results-${currentUser}`;
+  console.log('💾 Saving result to:', key);
+  
+  try {
+    const results = JSON.parse(localStorage.getItem(key) || '[]');
+    results.push(result);
+    localStorage.setItem(key, JSON.stringify(results));
+    console.log('✅ Result saved successfully. Total exams:', results.length);
+    
+    // Verify save
+    const verify = JSON.parse(localStorage.getItem(key) || '[]');
+    console.log('🔍 Verification - stored exams:', verify.length);
+  } catch (error) {
+    console.error(' Error saving result:', error);
+  }
+}
+
+function getResults() {
+  const key = `apcsa-results-${currentUser}`;
+  const results = JSON.parse(localStorage.getItem(key) || '[]');
+  console.log('📥 Retrieved results for', currentUser, ':', results.length, 'exams');
+  return results;
+}
+
+// ==================== RESULTS DISPLAY ====================
+function showResults(result) {
+  console.log('📊 Showing results...');
+  showView('results');
+  const container = document.getElementById('resultsContent');
+  
+  const mcqPct = result.mcqTotal > 0 ? Math.round(result.mcqCorrect/result.mcqTotal*100) : 0;
+  const frqPct = result.frqTotal > 0 ? Math.round(result.frqEarned/result.frqTotal*100) : 0;
+  const mins = Math.floor(result.timeTaken/60);
+  const secs = result.timeTaken%60;
+  
+  let html = `
+    <div class="results-header fade-in">
+      <h2>📊 Exam Results</h2>
+      <div class="results-score">${result.overallPct}%</div>
+      <div class="ap-score-badge">AP Score: ${result.apScore} / 5</div>
+      <p style="margin-top:16px;opacity:0.9">Completed in ${mins}m ${secs}s • ${result.mode} mode • ${result.focus} focus</p>
+    </div>
+    
+    <div class="results-grid">
+      ${result.hasMCQs ? `
+      <div class="result-card">
+        <h3>✅ MCQ Performance</h3>
+        <div class="circular-chart">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="60" fill="none" stroke="var(--border)" stroke-width="12"/>
+            <circle cx="75" cy="75" r="60" fill="none" stroke="var(--success)" stroke-width="12"
+              stroke-dasharray="${mcqPct*3.77} 377" stroke-linecap="round"/>
+          </svg>
+          <div class="chart-value">${mcqPct}%</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--success)">${result.mcqCorrect} / ${result.mcqTotal} correct</div>
+          <div style="color:var(--danger);font-size:0.9rem">${result.mcqTotal - result.mcqCorrect} incorrect</div>
+        </div>
+      </div>
+      ` : ''}
+      
+      ${result.hasFRQs ? `
+      <div class="result-card">
+        <h3>💻 FRQ Performance</h3>
+        <div class="circular-chart">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="60" fill="none" stroke="var(--border)" stroke-width="12"/>
+            <circle cx="75" cy="75" r="60" fill="none" stroke="var(--accent2)" stroke-width="12"
+              stroke-dasharray="${frqPct*3.77} 377" stroke-linecap="round"/>
+          </svg>
+          <div class="chart-value">${frqPct}%</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:1.2rem;font-weight:700;color:var(--accent2)">${result.frqEarned} / ${result.frqTotal} points</div>
+          <div style="color:var(--text-secondary);font-size:0.9rem">Rubric-based scoring</div>
+        </div>
+      </div>
+      ` : ''}
+      
+      <div class="result-card">
+        <h3>🎯 Topic Breakdown</h3>
+        ${Object.keys(result.topicStats).length > 0 ? Object.entries(result.topicStats).map(([topic, stats]) => {
+          const pct = stats.total > 0 ? Math.round(stats.correct/stats.total*100) : 0;
+          const color = pct >= 70 ? 'var(--success)' : pct >= 50 ? 'var(--warning)' : 'var(--danger)';
+          return `<div class="topic-bar">
+            <div class="topic-bar-header">
+              <span>${topic}</span>
+              <span style="font-weight:700">${stats.correct}/${stats.total} (${pct}%)</span>
+            </div>
+            <div class="topic-bar-track">
+              <div class="topic-bar-fill" style="width:${pct}%;background:${color}"></div>
+            </div>
+          </div>`;
+        }).join('') : '<p style="color:var(--text-secondary)">No topic data available</p>'}
+      </div>
+    </div>
+    
+    ${result.mcqResults && result.mcqResults.length > 0 ? `
+    <div class="result-card" style="margin-bottom:16px">
+      <h3> MCQ Detailed Feedback</h3>
+      ${result.mcqResults.map((r, i) => `
+        <div class="feedback-item ${r.isCorrect ? '' : 'incorrect'}">
+          <div class="feedback-header">
+            <strong>Q${i+1}: ${r.topic}</strong>
+            <span class="feedback-status ${r.isCorrect ? 'correct' : 'incorrect'}">${r.isCorrect ? '✓ Correct' : '✗ Incorrect'}</span>
+          </div>
+          <div style="font-size:0.9rem;margin-bottom:8px">${r.question.replace(/\n/g,'<br>')}</div>
+          ${r.code ? `<div class="question-code" style="margin:8px 0">${escapeHtml(r.code)}</div>` : ''}
+          <div style="font-size:0.85rem">
+            <strong>Your answer:</strong> ${r.userAnswer !== undefined ? String.fromCharCode(65+r.userAnswer) + '. ' + r.options[r.userAnswer] : 'Not answered'}<br>
+            <strong>Correct answer:</strong> ${String.fromCharCode(65+r.correct) + '. ' + r.options[r.correct]}
+          </div>
+          <div class="feedback-explanation">💡 ${r.explanation}</div>
+        </div>
+      `).join('')}
+    </div>
+    ` : ''}
+    
+    ${result.frqResults && result.frqResults.length > 0 ? `
+    <div class="result-card" style="margin-bottom:16px">
+      <h3>💻 FRQ Rubric Scores & Feedback</h3>
+      ${result.frqResults.map((r, i) => `
+        <div class="feedback-item ${r.earned === r.total ? '' : r.earned > 0 ? 'partial' : 'incorrect'}">
+          <div class="feedback-header">
+            <strong>${r.question.title}</strong>
+            <span class="feedback-status ${r.earned === r.total ? 'correct' : r.earned > 0 ? 'partial' : 'incorrect'}">${r.earned}/${r.total} points</span>
+          </div>
+          <div class="rubric-score">
+            ${r.rubric.map((rub, j) => `<div class="rubric-dot ${rub.earned ? 'earned' : 'not-earned'}" title="${rub.description}">${rub.earned ? '✓' : (j+1)}</div>`).join('')}
+          </div>
+          ${r.rubric.map((rub, j) => `<div style="font-size:0.8rem;margin:4px 0;color:${rub.earned ? 'var(--success)' : 'var(--danger)'}">${rub.earned ? '✓' : '✗'} ${rub.description}</div>`).join('')}
+          <div class="feedback-explanation">
+            <strong>Sample Solution:</strong>
+            <div class="question-code" style="margin-top:8px">${escapeHtml(r.question.sampleSolution)}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    ` : ''}
+    
+    <div class="result-card" style="margin-bottom:16px">
+      <h3> Personalized Recommendations</h3>
+      ${generateRecommendations(result)}
+    </div>
+    
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn btn-primary" onclick="showView('dashboard')" style="width:auto">← Back to Dashboard</button>
+      <button class="btn btn-secondary" onclick="showView('examSetup')" style="width:auto">🔄 Take Another Exam</button>
+      <button class="btn btn-outline" onclick="showView('analytics')" style="width:auto">📊 View Analytics</button>
+    </div>
+  `;
+  
+  container.innerHTML = html;
+  console.log('✅ Results displayed');
+}
+
+function generateRecommendations(result) {
+  const recs = [];
+  
+  if (result.topicStats && Object.keys(result.topicStats).length > 0) {
+    Object.entries(result.topicStats).forEach(([topic, stats]) => {
+      const pct = stats.total > 0 ? stats.correct/stats.total : 1;
+      if (pct < 0.5) {
+        recs.push({icon:'📚',text:`Review <strong>${topic}</strong> - Score: ${Math.round(pct*100)}%. Focus on fundamentals and practice more problems.`});
+      } else if (pct < 0.7) {
+        recs.push({icon:'',text:`Practice more <strong>${topic}</strong> problems - Score: ${Math.round(pct*100)}%. You're getting there!`});
+      }
+    });
+  }
+  
+  if (result.hasFRQs && result.frqEarned < result.frqTotal * 0.5) {
+    recs.push({icon:'💻',text:'Practice writing complete Java methods. Focus on syntax, variable declarations, and loop structures.'});
+  }
+  
+  if (result.apScore < 3) {
+    recs.push({icon:'🎯',text:'Consider reviewing all units systematically. Start with Unit 4 (50-52% of exam) as it has the highest weight.'});
+  }
+  
+  if (recs.length === 0) {
+    recs.push({icon:'🌟',text:'Excellent work! Keep practicing to maintain your skills. Try more challenging problems.'});
+  }
+  
+  return recs.map(r => `<div class="recommendation"><span class="rec-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
+}
+
+// ==================== DASHBOARD ====================
+function updateDashboard() {
+  console.log('🔄 Updating dashboard for:', currentUser);
+  
+  if (!currentUser || currentUser === 'admin') {
+    console.log('⚠️ No user or admin user, skipping dashboard update');
+    return;
+  }
+  
+  const results = getResults();
+  document.getElementById('statExams').textContent = results.length;
+  
+  if (results.length > 0) {
+    const best = Math.max(...results.map(r => r.overallPct));
+    const avg = Math.round(results.reduce((s,r) => s + r.overallPct, 0) / results.length);
+    const lastAP = results[results.length-1].apScore;
+    
+    document.getElementById('statBest').textContent = best + '%';
+    document.getElementById('statAvg').textContent = avg + '%';
+    document.getElementById('statAP').textContent = lastAP;
+    
+    if (results.length > 1) {
+      const prev = results[results.length-2].overallPct;
+      const curr = results[results.length-1].overallPct;
+      const change = curr - prev;
+      const changeEl = document.getElementById('statBestChange');
+      changeEl.textContent = (change >= 0 ? '+' : '') + change + '% from last';
+      changeEl.className = 'stat-change ' + (change >= 0 ? 'up' : 'down');
+    }
+    
+    console.log(' Dashboard stats - Exams:', results.length, 'Best:', best + '%', 'Avg:', avg + '%');
+  } else {
+    document.getElementById('statBest').textContent = '--';
+    document.getElementById('statAvg').textContent = '--';
+    document.getElementById('statAP').textContent = '--';
+    console.log('📊 No exams taken yet');
+  }
+  
+  // Update unit progress
+  const topicMastery = {};
+  results.forEach(r => {
+    if (r.topicStats) {
+      Object.entries(r.topicStats).forEach(([topic, stats]) => {
+        if (!topicMastery[topic]) topicMastery[topic] = {correct:0,total:0};
+        topicMastery[topic].correct += stats.correct;
+        topicMastery[topic].total += stats.total;
+      });
+    }
+  });
+  
+  const unitTopics = {
+    1: ['Primitive Types'],
+    2: ['Using Objects'],
+    3: ['Boolean Expressions','If Statements','Loops'],
+    4: ['Array Creation','Array Access','Array Traversal','Array Algorithms','ArrayList Methods','ArrayList Traversals','ArrayList Algorithms','2D Array Creation','2D Array Traversals','2D Array Algorithms','Recursion','Searching Algorithms','Sorting Algorithms','Algorithms']
+  };
+  
+  for (let u = 1; u <= 4; u++) {
+    let total = 0, correct = 0;
+    (unitTopics[u]||[]).forEach(t => {
+      if (topicMastery[t]) {
+        total += topicMastery[t].total;
+        correct += topicMastery[t].correct;
+      }
+    });
+    const pct = total > 0 ? Math.round(correct/total*100) : 0;
+    const el = document.getElementById(`u${u}progress`);
+    if (el) el.style.width = pct + '%';
+  }
+}
+
+// ==================== ANALYTICS ====================
+function updateAnalytics() {
+  console.log('🔄 Updating analytics for:', currentUser);
+  
+  if (!currentUser || currentUser === 'admin') {
+    console.log('⚠️ No user or admin user, skipping analytics update');
+    return;
+  }
+  
+  const results = getResults();
+  document.getElementById('anExams').textContent = results.length;
+  
+  if (results.length > 0) {
+    const best = Math.max(...results.map(r => r.overallPct));
+    const avg = Math.round(results.reduce((s,r) => s + r.overallPct, 0) / results.length);
+    const totalMin = Math.round(results.reduce((s,r) => s + r.timeTaken, 0) / 60);
+    
+    document.getElementById('anBest').textContent = best + '%';
+    document.getElementById('anAvg').textContent = avg + '%';
+    document.getElementById('anTime').textContent = totalMin >= 60 ? Math.round(totalMin/60) + 'h' : totalMin + 'm';
+  } else {
+    document.getElementById('anBest').textContent = '--';
+    document.getElementById('anAvg').textContent = '--';
+    document.getElementById('anTime').textContent = '0h';
+  }
+  
+  // Score trend chart
+  const trendChart = document.getElementById('scoreTrendChart');
+  if (results.length > 0) {
+    const maxScore = 100;
+    trendChart.innerHTML = results.slice(-10).map((r, i) => {
+      const h = (r.overallPct / maxScore) * 180;
+      return `<div class="bar" style="height:${h}px">
+        <div class="bar-value">${r.overallPct}%</div>
+        <div class="bar-label">Exam ${i+1}</div>
+      </div>`;
+    }).join('');
+  } else {
+    trendChart.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:40px">No exams taken yet</p>';
+  }
+  
+  // Topic mastery
+  const topicMastery = {};
+  results.forEach(r => {
+    if (r.topicStats) {
+      Object.entries(r.topicStats).forEach(([topic, stats]) => {
+        if (!topicMastery[topic]) topicMastery[topic] = {correct:0,total:0};
+        topicMastery[topic].correct += stats.correct;
+        topicMastery[topic].total += stats.total;
+      });
+    }
+  });
+  
+  const topicEl = document.getElementById('topicMasteryChart');
+  if (Object.keys(topicMastery).length > 0) {
+    topicEl.innerHTML = Object.entries(topicMastery).map(([topic, stats]) => {
+      const pct = Math.round(stats.correct/stats.total*100);
+      const color = pct >= 70 ? 'var(--success)' : pct >= 50 ? 'var(--warning)' : 'var(--danger)';
+      return `<div class="topic-bar">
+        <div class="topic-bar-header">
+          <span>${topic}</span>
+          <span style="font-weight:700">${pct}%</span>
+        </div>
+        <div class="topic-bar-track">
+          <div class="topic-bar-fill" style="width:${pct}%;background:${color}"></div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    topicEl.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px">No data yet</p>';
+  }
+  
+  // History table
+  const historyBody = document.getElementById('historyBody');
+  if (results.length > 0) {
+    historyBody.innerHTML = results.slice().reverse().map(r => {
+      const date = new Date(r.date).toLocaleDateString();
+      const mcqPct = r.mcqTotal > 0 ? Math.round(r.mcqCorrect/r.mcqTotal*100) : 0;
+      return `<tr>
+        <td>${date}</td>
+        <td>${r.mode}</td>
+        <td>${r.mcqCorrect}/${r.mcqTotal} (${mcqPct}%)</td>
+        <td><strong>${r.apScore}</strong></td>
+        <td><span class="feedback-status ${r.apScore >= 3 ? 'correct' : 'incorrect'}">${r.apScore >= 3 ? 'Passing' : 'Needs Work'}</span></td>
+      </tr>`;
+    }).join('');
+  } else {
+    historyBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-secondary)">No exams taken yet</td></tr>';
+  }
+  
+  // Strengths & Weaknesses
+  const swEl = document.getElementById('strengthsWeaknesses');
+  if (Object.keys(topicMastery).length > 0) {
+    const sorted = Object.entries(topicMastery).map(([t,s]) => [t, s.correct/s.total]).sort((a,b) => b[1]-a[1]);
+    const strengths = sorted.filter(([_,p]) => p >= 0.7).slice(0,3);
+    const weaknesses = sorted.filter(([_,p]) => p < 0.6).slice(0,3);
+    
+    let html = '';
+    if (strengths.length > 0) {
+      html += '<h4 style="color:var(--success);margin-bottom:8px"> Strengths</h4>';
+      strengths.forEach(([t,p]) => html += `<div class="recommendation"><span class="rec-icon">✓</span><span><strong>${t}</strong> - ${Math.round(p*100)}% mastery</span></div>`);
+    }
+    if (weaknesses.length > 0) {
+      html += '<h4 style="color:var(--danger);margin:16px 0 8px">️ Areas to Improve</h4>';
+      weaknesses.forEach(([t,p]) => html += `<div class="recommendation"><span class="rec-icon">📚</span><span><strong>${t}</strong> - ${Math.round(p*100)}% mastery - needs review</span></div>`);
+    }
+    if (strengths.length === 0 && weaknesses.length === 0) {
+      html = '<p style="color:var(--text-secondary)">Take more exams to see your strengths and weaknesses.</p>';
+    }
+    swEl.innerHTML = html;
+  } else {
+    swEl.innerHTML = '<p style="color:var(--text-secondary)">Take exams to see your analysis.</p>';
+  }
+}
+
+// ==================== ADMIN ====================
+function updateAdmin() {
+  console.log('🔄 Updating admin panel');
+  
+  if (currentRole !== 'admin') {
+    console.log('⚠️ Not admin, skipping admin update');
+    return;
+  }
+  
+  let totalExams = 0;
+  let totalScore = 0;
+  let scoreCount = 0;
+  
+  const studentList = document.getElementById('adminStudentList');
+  let html = '';
+  
+  STUDENTS.forEach(student => {
+    const results = JSON.parse(localStorage.getItem(`apcsa-results-${student}`) || '[]');
+    totalExams += results.length;
+    
+    if (results.length > 0) {
+      const avg = Math.round(results.reduce((s,r) => s + r.overallPct, 0) / results.length);
+      const best = Math.max(...results.map(r => r.overallPct));
+      totalScore += avg;
+      scoreCount++;
+      html += `<div class="student-row">
+        <div>
+          <strong>${student.charAt(0).toUpperCase() + student.slice(1)}</strong>
+          <div style="font-size:0.8rem;color:var(--text-secondary)">${results.length} exams taken</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-weight:700;color:var(--primary)">Avg: ${avg}%</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary)">Best: ${best}%</div>
+        </div>
+      </div>`;
+    } else {
+      html += `<div class="student-row">
+        <div>
+          <strong>${student.charAt(0).toUpperCase() + student.slice(1)}</strong>
+          <div style="font-size:0.8rem;color:var(--text-secondary)">No exams taken</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-weight:700;color:var(--text-secondary)">--</div>
+        </div>
+      </div>`;
+    }
+  });
+  
+  studentList.innerHTML = html;
+  document.getElementById('adminTotalExams').textContent = totalExams;
+  document.getElementById('adminClassAvg').textContent = scoreCount > 0 ? Math.round(totalScore/scoreCount) + '%' : '--';
+  
+  console.log('📊 Admin stats - Total exams:', totalExams, 'Class avg:', scoreCount > 0 ? Math.round(totalScore/scoreCount) + '%' : '--');
+}
+
+// ==================== INIT ====================
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('examView').classList.contains('active')) {
+    if (e.key === 'ArrowRight') nextQuestion();
+    if (e.key === 'ArrowLeft') prevQuestion();
+  }
+});
+
+// Enter key for login
+document.getElementById('studentPassword').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') loginStudent();
+});
+document.getElementById('adminPassword').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') loginAdmin();
+});
+
+// Debug: Log localStorage on load
+console.log('🔍 Initial localStorage state:');
+STUDENTS.forEach(s => {
+  const data = localStorage.getItem(`apcsa-results-${s}`);
+  if (data) {
+    const parsed = JSON.parse(data);
+    console.log(`  ${s}: ${parsed.length} exams`);
+  }
+});
+</script>
+</body>
+</html>
+
