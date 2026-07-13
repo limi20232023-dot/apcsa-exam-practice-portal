@@ -945,8 +945,8 @@ body {
       <div class="login-error" id="loginError"></div>
       <div class="student-list-hint">
         💡 For login issues please contact Mr.T
-        <!-- Students: alice, bob, charlie, diana, ethan, fiona, george, hannah, ivan, julia, kevin, laura, michael, nina, oscar<br>
-        Password: firstname_2027 (e.g., alice_2027) -->
+        <!--const STUDENTS = 'andy','charless','chloe','edwin','ethan','harry','howard','jerry','joe','mike','nate','sherry','tom','tommy','william';<br>
+        Password: firstname_2027 (e.g., andy_2027) -->
       </div>
     </div>
     <div id="adminLoginForm" class="hidden">
@@ -984,7 +984,7 @@ body {
       <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn"></button>
       <div class="user-badge">
         <div class="user-avatar" id="userAvatar">A</div>
-        <span id="userName">Alice</span>
+        <span id="userName">Andy</span>
       </div>
       <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
@@ -994,7 +994,7 @@ body {
     <!-- DASHBOARD VIEW -->
     <div id="dashboardView" class="tab-content active">
       <div class="dashboard-hero fade-in">
-        <h2>Welcome back, <span id="dashUserName">Alice</span>! 👋</h2>
+        <h2>Welcome back, <span id="dashUserName">Andy</span>! 👋</h2>
         <p>Continue your AP Computer Science A exam preparation. You're making great progress!</p>
       </div>
       <div class="stats-grid" id="statsGrid">
@@ -1249,7 +1249,7 @@ body {
 
 <script>
 // ==================== DATA ====================
-const STUDENTS = ['alice','bob','charlie','diana','ethan','fiona','george','hannah','ivan','julia','kevin','laura','michael','nina','oscar'];
+const STUDENTS = ['andy','charless','chloe','edwin','ethan','harry','howard','jerry','joe','mike','nate','sherry','tom','tommy','william'];
 const ADMIN_CREDENTIALS = { username: 'admin', password: 'admin2027' };
 
 let currentUser = null;
